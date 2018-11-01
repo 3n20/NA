@@ -1,0 +1,202 @@
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="background-color: #4C6294">
+                    <h4 class="title">INTERAÇÕES POR PERÍODO</h4>
+                </div>
+                <div class="card-content table-responsive">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card" >
+                                <div class="card-header card-chart" style="background-color: #ACCAF2">
+                                    <canvas *ngIf="chartHours" id="canvasHours">{{ chartHours }}</canvas>
+                                </div>
+                                <div class="card-content">
+                                    <h4 class="title">HORA</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card" >
+                                <div class="card-header card-chart" style="background-color: #91BBF2">
+                                    <div *ngIf="chartDay">
+                                        <canvas id="canvasDay">{{ chartDay }}</canvas>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <h4 class="title">DIÁRIO</h4>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card" >
+                                <div class="card-header card-chart" style="background-color: #77ABD9">
+                                    <div *ngIf="chartWeek">
+                                        <canvas id="canvasWeek">{{ chartWeek }}</canvas>
+                                    </div>
+
+
+                                </div>
+                                <div class="card-content">
+                                    <h4 class="title">SEMANAL</h4>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card" >
+                                <div class="card-header card-chart" style="background-color: #6C9BD9">
+                                    <div *ngIf="chartYear">
+                                        <canvas id="canvasYear">{{ chartYear }}</canvas>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <h4 class="title">ANUAL</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div  class="col-md-6">
+                    <div  class="card">
+                        <div  class="card-header" style="background-color: #4C6294">
+                            <h4  class="title">AVALIAÇÕES</h4>
+                            <select class="custom-select" [(ngModel)]="selectDateAval" (ngModelChange)="getAval()">
+                                <option selected>Selecione uma opção</option>
+                                <option value="1">Dia</option>
+                                <option value="2">Semana</option>
+                                <option value="3">Mês</option>
+                                <option value="4">Ano</option>
+                            </select>
+                        </div>
+                        <div class="card-content">
+                            <div  class="row">
+                                <div  class="col-md-12">
+                                    <div *ngIf="isCartEvalVisible">
+                                        <canvas id="canvasEval">{{ chartEval }}</canvas>
+                                    </div>
+                                    <div *ngIf="!isCartEvalVisible">
+                                        <h3>{{msgCharts}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div  class="col-md-6">
+                    <div  class="card">
+                        <div  class="card-header" style="background-color: #4C6294">
+                            <h4  class="title">CONFIANÇA</h4>
+                            <select class="custom-select" [(ngModel)]="selectDateConfianca" (ngModelChange)="confiabilidade()">
+                                <option selected>Selecione uma opção</option>
+                                <option value="1">Dia</option>
+                                <option value="2">Semana</option>
+                                <option value="3">Mês</option>
+                                <option value="4">Ano</option>
+                            </select>
+
+                        </div>
+                        <div  class="card-content">
+                            <div  class="row">
+                                <div  class="col-md-12">
+                                    <div *ngIf="isCartConfVisible">
+                                        <canvas id="canvasConf">{{ chartConf }}</canvas>
+                                    </div>
+                                    <div *ngIf="!isCartConfVisible">
+                                        <h3>{{msgCharts}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="card">
+                        <div class="card-header" style="background-color: #4C6294">
+                            <h4 class="title">TOP INTENÇÕES</h4>
+                            <select class="custom-select" [(ngModel)]="selectDateIntentes" (ngModelChange)="topInteracoes()">
+                                <option selected>Selecione uma opção</option>
+                                <option value="1">Dia</option>
+                                <option value="2">Semana</option>
+                                <option value="3">Mês</option>
+                                <option value="4">Ano</option>
+                            </select>
+                        </div>
+                        <div class="card-content table-responsive">
+                            <table class="table table-hover">
+                                <thead class="text-warning">
+                                <tr><th>Status</th>
+                                    <th>Quantidade</th>
+                                </tr></thead>
+                                <tbody>
+                                <tr *ngFor="let top of topInterations | paginate: { id: 'intencao',
+                                                      itemsPerPage: 6,
+                                                      currentPage: p}">
+                                    <td>{{top._id}}</td>
+                                    <td>{{top.count}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                            <pagination-controls class="pull-right"  id="intencao"
+                                                 (pageChange)="p = $event"
+                                                 previousLabel="Anterior"
+                                                 nextLabel="Próximo"
+                                                 screenReaderPaginationLabel="Pagination"
+                                                 screenReaderPageLabel="page">
+                            </pagination-controls>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="card">
+                        <div class="card-header" style="background-color: #4C6294">
+                            <h4 class="title">TOP ENTIDADES</h4>
+                            <select [(ngModel)]="selectDateEntities" (ngModelChange)="topEntitiesFunc()">
+                                <option selected>Selecione uma opção</option>
+                                <option value="1">Dia</option>
+                                <option value="2">Semana</option>
+                                <option value="3">Mês</option>
+                                <option value="4">Ano</option>
+                            </select>
+                        </div>
+                        <div class="card-content table-responsive">
+                            <table class="table table-hover">
+                                <thead class="text-warning">
+                                <tr><th>Status</th>
+                                    <th>Quantidade</th>
+                                </tr></thead>
+                                <tbody>
+                                <tr *ngFor="let top of topEntities | paginate: { id: 'entidade',
+                                                      itemsPerPage: 6,
+                                                      currentPage: p}">
+                                    <td>{{top._id}}</td>
+                                    <td>{{top.count}}</td>
+                                </tr>
+                                </tbody>
+
+                            </table>
+                            <br>
+                            <pagination-controls class="pull-right"  id="entidade"
+                                                 (pageChange)="pageChanged( p = $event)"
+                                                 previousLabel="Anterior"
+                                                 nextLabel="Próximo"
+                                                 screenReaderPaginationLabel="Pagination"
+                                                 screenReaderPageLabel="page">
+                            </pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

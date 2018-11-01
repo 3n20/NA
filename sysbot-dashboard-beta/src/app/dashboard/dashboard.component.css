@@ -1,0 +1,56 @@
+.classification-positive {
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    background: #00bcd4;
+}
+
+.classification-negative {
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    background: #f44336;
+}
+
+.classification-none {
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    background: #ff9800;
+}
+
+.classification-sem-confianca {
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    background: #00bcd4;
+}
+
+.classification-baixa-confianca {
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    background: #f44336;
+}
+
+.classification-media-confianca{
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    background: #ff9800;
+}
+
+.classification-alta-confianca{
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    background: #9c27b0;
+}
+
+.ng-deep .cdk-overlay-container {
+    z-index: 1200 !important;
+}
+
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+    z-index: 99999 !important;
+}

@@ -1,0 +1,132 @@
+<div class="container-fluid">
+    <div class="row">
+        <button class="btn bmd-btn-icon" for="search" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapse-search">
+            <i class="material-icons">search</i>
+        </button>
+        <div class="col-md-12">
+            <div class="collapse" id="collapseExample">
+                <div class="card">
+                    <div class="card-content table-responsive">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group form-black ">
+                                    <label for="cliente" class="control-label">Cliente</label>
+                                    <input class="form-control" type="text" id="cliente" [(ngModel)]="filter.iduser">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group ">
+                                    <label for="dtInicio" class="control-label">Data Inicial</label>
+                                    <input class="form-control" type="date" id="dtInicio" [ngModel]="filter.dataInicio | date:'dd/MM/yyyy'" (input)="filter.dataInicio = parseDate($event.target.value)">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-black ">
+                                    <label for="dtFinal" class="control-label" >Data Final</label>
+                                    <input class="form-control" type="date" id="dtFinal" [ngModel]="filter.dataFinal | date:'dd/MM/yyyy'" (input)="filter.dataFinal =parseDate($event.target.value)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <button class="btn btn-docs" (click)="listarConversasPorFiltro()">Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header" style="background-color: #4C6294">
+                        <h4 class="title">Lista de Conversas</h4>
+                    </div>
+                    <div class="card-content table-responsive">
+
+                        <table class="table table-hover">
+                            <thead class="text-danger">
+                            <tr>
+                                <th  class="text-center">Status</th>
+                                <th  class="text-center" style="width: 50px">Cliente</th>
+                                <th  class="text-center"
+                                     [class.active]="order === 'info.name'"
+                                     (click)="setOrder('info.name')"
+                                     style="width: 250px">Horario <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+                                </th>
+                                <th  class="text-center">Conversation Id</th>
+                                <th  class="text-center">Ações</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let conversation of conversations | orderBy: order:reverse:'case-insensitive' | paginate: { itemsPerPage: 100, currentPage: p }; let i = index">
+                                <td class="text-center">
+                                    <img *ngIf="conversation.status_conversation == 'andamento'" src="../../assets/img/online.png" style="height: 30px; width: 30px;" alt="Online">
+                                    <img *ngIf="conversation.status_conversation == 'inicio'" src="../../assets/img/online.png" style="height: 30px; width: 30px;" alt="Online">
+                                    <img *ngIf="conversation.status_conversation == 'final'" src="../../assets/img/offline.png" style="height: 30px; width: 30px;" alt="Offline">
+                                </td>
+                                <td  class="text-center">{{conversation.iduser}}</td>
+                                <td class="text-center">{{conversation.timestamp | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+                                <td class="text-center">{{conversation.conversation_id}}</td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-white btn-round btn-just-icon" (click)="pesquisarConversa(conversation._id)" data-toggle="modal" data-target="#exampleModal">
+                                        <i class="material-icons">chat</i><div class="ripple-container"></div>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <br>
+                        <pagination-controls class="pull-right"
+                                             (pageChange)="pageChanged( p = $event)"
+                                             previousLabel="Anterior"
+                                             nextLabel="Próximo"
+                                             screenReaderPaginationLabel="Pagination"
+                                             screenReaderPageLabel="page">
+                        </pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="exampleModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">CHAT</h5>
+                    <button id="closeExampleModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" >
+                    <ol class="chat" id="chat-list" *ngFor="let chat of conversationLog">
+                        <li class="self">
+                            <div class="avatar"><img src="../../assets/img/usuario.png" draggable="false"/></div>
+                            <div class="msg">
+                                <p>{{chat.input}}</p>
+                                <time>{{chat.dateCreated | date:'dd/MM/yyyy HH:mm:ss'}}</time>
+                            </div>
+                        </li>
+                        <li class="other">
+                            <div class="avatar"><img src="../../assets/img/sysbot.png" draggable="false"/></div>
+                            <div class="msg">
+                                <p>{{chat.output[0].output[0]}}</p>
+                                <time>{{chat.output[0].dateCreated | date:'dd/MM/yyyy HH:mm:ss'}}</time>
+                            </div>
+                        </li>
+
+                        <!--<li class="msg-you">{{chat.input}}</li>-->
+                        <!--<li class="msg-me">{{chat.output[0]}}</li>-->
+                    </ol>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
+</div>

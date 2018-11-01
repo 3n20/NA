@@ -1,0 +1,58 @@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group form-black ">
+                <div class="form-group form-black ">
+                    <label for="coloracao" class="control-label">Logs</label>
+                    <select class="form-control"  (change)="filterLogsType($event.target.value)" id="coloracao" required [(ngModel)]="logType" name="coloracaoType">
+                        <option  *ngFor="let log of logsTypeList" [ngValue]="log.value">{{log.label}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group form-black ">
+                <div class="form-group form-black ">
+                    <label for="coloracao" class="control-label">Filtros</label>
+                    <input type="text" class="form-control" [(ngModel)]="filter" placeholder="Exemplo: Info, request, retorno...">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card">
+            <div class="card-header" style="background-color: #4C6294">
+                <h4 class="title">{{logType | uppercase}}</h4>
+                <p class="category">Server logs do módulo de {{logType}}</p>
+            </div>
+            <div class="card-content table-responsive">
+                <table class="table table-hover">
+                    <thead class="text-warning">
+                    <tr>
+                        <th>Nível</th>
+                        <th>Mensagem</th>
+                        <th>Data</th>
+                    </tr></thead>
+                    <tbody>
+                    <tr *ngFor="let auth of logsFilter | filter:filter | paginate: { itemsPerPage: 100, currentPage: p }">
+                        <td (click)="sort('error')">
+                            {{auth.level}}
+                        </td>
+                        <td>{{auth.message}}</td>
+                        <td>{{auth.timestamp | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+                    </tr>
+                    <pagination-controls class="pull-right"
+                                         (pageChange)="pageChanged( p = $event)"
+                                         previousLabel="Anterior"
+                                         nextLabel="Próximo"
+                                         screenReaderPaginationLabel="Pagination"
+                                         screenReaderPageLabel="page">
+                    </pagination-controls>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
